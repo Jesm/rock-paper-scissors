@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    image: node:9
+    working_dir: /usr/src/app
+    tty: true
+    ports:
+      - '8080:3000'
+    volumes:
+      - .:/usr/src/app
