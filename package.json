@@ -1,5 +1,5 @@
 {
-  "name": "rock-paper-scissor",
+  "name": "rock-paper-scissors",
   "version": "0.1.0",
   "description": "",
   "main": "server.js",
@@ -11,6 +11,12 @@
     "start": "concurrently --kill-others \"npm run serve\" \"npm run watch\""
   },
   "author": "Jonathan Szablevski",
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less|scss)$": "<rootDir>/__mocks__/styleMock.js"
+    }
+  },
   "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.26.0",

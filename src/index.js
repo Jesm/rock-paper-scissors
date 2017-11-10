@@ -1,4 +1,6 @@
-((id) => {
+import App from './App.js';
+
+(id => {
   const root = document.getElementById(id);
-  root.innerText = 'Hello World!';
+  const app = new App(root);
 })('root');
