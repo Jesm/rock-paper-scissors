@@ -19,3 +19,8 @@ const names = {
   [SCISSOR]: 'Scissor'
 };
 export const name = key => names[key];
+
+export const randomGesture = (func = null) => {
+  const index = Math.floor(Math.random() * gestures.length);
+  return gestures[index];
+};

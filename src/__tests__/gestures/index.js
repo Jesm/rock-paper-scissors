@@ -27,3 +27,16 @@ describe('function beats', () => {
     expect(gestures.beats(gestures.SCISSOR, gestures.ROCK)).toBe(false);
   });
 });
+
+describe('function randomGesture', () => {
+  test('should return correct gesture according to randomic function', () => {
+    Math.random = () => .2;
+    expect(gestures.randomGesture()).toEqual(gestures.ROCK);
+
+    Math.random = () => .5;
+    expect(gestures.randomGesture()).toEqual(gestures.PAPER);
+
+    Math.random = () => .8;
+    expect(gestures.randomGesture()).toEqual(gestures.SCISSOR);
+  });
+});

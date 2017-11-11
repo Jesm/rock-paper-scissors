@@ -23,7 +23,7 @@ describe('ClickableButton setup', () => {
 
   test('should not call callback when button is clicked and component status is false', () => {
     const { parent, onClick, component } = aux();
-    component.setStatus(false);
+    component.enable(false);
     parent.querySelector('button').click();
     expect(onClick).not.toBeCalled();
   });

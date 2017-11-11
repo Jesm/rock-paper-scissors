@@ -1,39 +1,89 @@
-import AppComponent from './components/App.js';
+import AppComponent, { STATUS_CHANGE } from './components/App.js';
+import { randomGesture } from './gestures';
+import { make } from './games';
 
-const READY = Symbol('ready');
-const WAITING = Symbol('waiting');
+export const PLAYER = Symbol('player');
+export const COMPUTER = Symbol('computer');
 
-const PLAYER = Symbol('player');
-const COMPUTER = Symbol('computer');
+export const READY = Symbol('ready');
+export const GESTURE_SELECTED = Symbol('gesture_selected');
+export const GESTURE_CONFIRMED = Symbol('gesture_confirmed');
+export const GAME_GENERATED = Symbol('game_generated');
 
 export default class App {
-  constructor(root){
-    this.status = READY;
-    this.rootElement = root;
+  constructor(params = {}){
+    this.params = Object.assign({
+      pauseDuration: 2000,
+      viewRoot: null
+    }, params);
 
-    this.setup();
-    this.resetState();
+    this.status = null;
+    this.selectedGesture = null;
+
+    if(this.params.viewRoot)
+      this.setupView(this.params.viewRoot);
+
+    this.start();
   }
 
-  setup(){
+  setupView(root){
     const fragment = document.createDocumentFragment();
 
-    const onGestureSubmit = this.handleGestureSubmit.bind(this);
-    this.appComponent = new AppComponent(fragment, { onGestureSubmit });
+    this.appComponent = new AppComponent(fragment, {
+      onGestureSelection: gesture => this.setSelectedGesture(gesture),
+      onGestureConfirmation: () => this.confirmGesture()
+    });
 
-    this.rootElement.appendChild(fragment);
+    root.appendChild(fragment);
   }
 
-  resetState(){
-    this.appComponent.resetSelection();
+  setStatus(status, params = {}){
+    this.status = status;
+
+    // use setTimeout with 0 delay to make callback execute only when the execution queue is free
+    setTimeout(() => {
+      if(this.appComponent)
+        this.appComponent.update(STATUS_CHANGE, Object.assign({ type: status }, params));
+    }, 0);
   }
 
-  handleGestureSubmit(gesture){
-    this.makeGame(gesture);
+  getStatus(){
+    return this.status;
   }
 
-  makeGame(gesture){
-    console.log(gesture);
-    this.resetState();
+  start(){
+    this.setStatus(READY);
+    this.selectedGesture = null;
+  }
+
+  setSelectedGesture(gesture){
+    if(![READY, GESTURE_SELECTED].includes(this.status))
+      return;
+
+    this.selectedGesture = gesture;
+    this.setStatus(GESTURE_SELECTED, { gesture });
+  }
+
+  confirmGesture(){
+    if(this.status != GESTURE_SELECTED)
+      return;
+
+    const computerGesture = randomGesture();
+    this.setStatus(GESTURE_CONFIRMED, { computerGesture });
+
+    setTimeout(() => this.makeGame(computerGesture), this.params.pauseDuration);
+  }
+
+  makeGame(computerGesture){
+    if(this.status != GESTURE_CONFIRMED)
+      return;
+
+    const game = make(
+      { player: PLAYER, gesture: this.selectedGesture },
+      { player: COMPUTER, gesture: computerGesture }
+    );
+
+    this.setStatus(GAME_GENERATED, { game });
+    setTimeout(() => this.start(), this.params.pauseDuration);
   }
 }

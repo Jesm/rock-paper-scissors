@@ -6,7 +6,8 @@ export default class GestureDisplay {
   constructor(parent, params = {}){
     this.params = Object.assign({
       enableSelection: false,
-      onSelection: null
+      onSelection: null,
+      classAppend: null
     }, params);
 
     this.selectedGesture = null;
@@ -17,7 +18,9 @@ export default class GestureDisplay {
   setup(parent){
     this.rootElement = createElement('ul', parent);
     this.rootElement.classList.add('gesture-display');
-    this.enableSelection(this.params.enableSelection);
+    if(this.params.classAppend)
+      this.rootElement.classList.add(this.params.classAppend);
+    this.enable(this.params.enableSelection);
 
     this.buttonIndex = gestures.reduce((carry, gesture) => {
       const li = createElement('li', this.rootElement);
@@ -30,13 +33,13 @@ export default class GestureDisplay {
     }, {});
   }
 
-  enableSelection(status){
-    this.params.enableSelection = status;
+  enable(status){
+    this.params.enabled = status;
     this.rootElement.classList[status ? 'add' : 'remove']('selectable');
   }
 
   handleClick(gesture){
-    if(this.params.enableSelection)
+    if(this.params.enabled)
       this.setSelectedGesture(gesture);
   }
 
@@ -44,14 +47,20 @@ export default class GestureDisplay {
     if(this.selectedGesture == gesture)
       return;
 
-    if(this.selectedGesture)
-      this.buttonIndex[this.selectedGesture].classList.remove('selected');
+    this.clearSelection();
 
     this.selectedGesture = gesture;
-    if(this.buttonIndex[gesture])
-      this.buttonIndex[gesture].classList.add('selected');
+    this.buttonIndex[gesture].classList.add('selected');
 
-    if(gesture && this.params.onSelection)
+    if(this.params.onSelection)
       this.params.onSelection(gesture);
+  }
+
+  clearSelection(){
+    if(!this.selectedGesture)
+      return;
+
+    this.buttonIndex[this.selectedGesture].classList.remove('selected');
+    this.selectedGesture = null;
   }
 }
