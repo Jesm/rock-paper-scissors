@@ -1,5 +1,53 @@
 .gesture-display {
-  button.selected {
-    box-shadow: 0 0 7px 0;
+  $separation-space: 10px;
+
+  padding: $separation-space 0;
+
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      flex: 1;
+      margin-right: $separation-space;
+      text-align: center;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .gesture {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid transparent;
+    border-radius: $base-border-radius;
+    text-align: center;
+    background-color: none;
+    cursor: pointer;
+    transition: opacity $transition-duration;
+
+    &:hover {
+      border-color: #CCC;
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  &.gesture-selected {
+    .gesture {
+      opacity: $disabled-opacity;
+
+      &.selected {
+        opacity: 1;
+        border-color: #FFF;
+      }
+    }
   }
 }

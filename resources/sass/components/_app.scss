@@ -1,0 +1,28 @@
+.app {
+  .gesture-display {
+    $border-size: 3px;
+
+    &.player {
+      background-color: $player-color;
+      border-top: $border-size solid $player-color-dark;
+
+      .gesture {
+        background-color: $player-color-light;
+      }
+    }
+
+    &.computer {
+      background-color: $computer-color;
+      border-bottom: $border-size solid $computer-color-dark;
+
+      .gesture {
+        background-color: $computer-color-light;
+        opacity: $disabled-opacity;
+
+        &.selected {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

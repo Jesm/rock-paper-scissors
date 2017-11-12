@@ -14,18 +14,15 @@ export default class ClickableButton {
   setup(parent){
     this.button = createElement('button', parent);
     this.button.classList.add('clickable-button');
-    this.button.innerText = 'Confirm';
+    this.button.innerText = this.params.label;
     this.enable(this.params.enabled);
-    this.button.addEventListener('click', this.handleClick.bind(this));
+
+    if(this.params.onClick)
+      this.button.addEventListener('click', this.params.onClick);
   }
 
   enable(status){
     this.params.enabled = status;
-    this.button.classList[status ? 'remove' : 'add']('disable');
-  }
-
-  handleClick(){
-    if(this.params.enabled && this.params.onClick)
-      this.params.onClick();
+    this.button.disabled = !status;
   }
 }

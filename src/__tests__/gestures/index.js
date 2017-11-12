@@ -40,3 +40,9 @@ describe('function randomGesture', () => {
     expect(gestures.randomGesture()).toEqual(gestures.SCISSOR);
   });
 });
+
+describe('function imageSrc', () => {
+  test('should return the correct image url', () => {
+    expect(gestures.imageSrc(gestures.PAPER)).toBe('test-file-stub');
+  });
+});

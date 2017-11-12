@@ -1,0 +1,20 @@
+.clickable-button {
+  display: block;
+  width: 100%;
+  border: 0;
+  line-height: 2.4rem;
+  border-radius: $base-border-radius;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  cursor: pointer;
+  background-color: $button-bg;
+  color: $button-color;
+  transition: background-color $transition-duration, opacity $transition-duration;
+
+  &:disabled {
+    cursor: default;
+    background-color: $button-disabled-bg;
+    opacity: .6;
+  }
+}

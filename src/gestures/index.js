@@ -1,3 +1,7 @@
+import Rock from '../../resources/images/rock.png';
+import Paper from '../../resources/images/paper.png';
+import Scissor from '../../resources/images/scissor.png';
+
 export const ROCK = Symbol('rock');
 export const PAPER = Symbol('paper');
 export const SCISSOR = Symbol('scissor');
@@ -24,3 +28,10 @@ export const randomGesture = (func = null) => {
   const index = Math.floor(Math.random() * gestures.length);
   return gestures[index];
 };
+
+const images = {
+  [ROCK]: Rock,
+  [PAPER]: Paper,
+  [SCISSOR]: Scissor
+};
+export const imageSrc = gestures => images[gestures];

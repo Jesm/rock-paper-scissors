@@ -1,6 +1,6 @@
 {
   "name": "rock-paper-scissors",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.7",
+    "file-loader": "^1.1.5",
     "jest": "^21.2.1",
     "node-sass": "^4.6.0",
     "sass-loader": "^6.0.6",

@@ -18,7 +18,7 @@ describe('MessageDisplay', () => {
     test('should update innerText from the span element', () => {
       const { parent, component } = aux();
       component.display('foobar');
-      const span = parent.querySelector('section > span');
+      const span = parent.querySelector('.message-display > div > span');
       expect(span.innerText).toBe('foobar');
     });
   });

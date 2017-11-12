@@ -19,6 +19,7 @@ export default class App {
 
   setup(parent){
     const root = createElement('div', parent);
+    root.classList.add('app');
 
     this.computerSelectionComponent = new GestureDisplay(root, { classAppend: 'computer' });
     this.msgDisplay = new MessageDisplay(root);
@@ -29,7 +30,10 @@ export default class App {
       onSelection: this.params.onGestureSelection
     });
 
-    this.confirmButton = new ClickableButton(root, { onClick: this.params.onGestureConfirmation });
+    const container = createElement('section', root);
+    container.classList.add('container');
+
+    this.confirmButton = new ClickableButton(container, { onClick: this.params.onGestureConfirmation });
   }
 
   update(type, data){

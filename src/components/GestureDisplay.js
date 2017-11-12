@@ -1,6 +1,5 @@
-import { gestures, name } from '../gestures';
+import { gestures, name, imageSrc } from '../gestures';
 import { createElement } from '../helpers';
-import '../../resources/sass/components/_gesture_display.scss';
 
 export default class GestureDisplay {
   constructor(parent, params = {}){
@@ -16,21 +15,36 @@ export default class GestureDisplay {
   }
 
   setup(parent){
-    this.rootElement = createElement('ul', parent);
+    this.rootElement = createElement('section', parent);
     this.rootElement.classList.add('gesture-display');
     if(this.params.classAppend)
       this.rootElement.classList.add(this.params.classAppend);
     this.enable(this.params.enableSelection);
 
-    this.buttonIndex = gestures.reduce((carry, gesture) => {
-      const li = createElement('li', this.rootElement);
-      const button = createElement('button', li);
-      button.innerText = name(gesture);
-      button.addEventListener('click', ev => this.handleClick(gesture));
+    const container = createElement('div', this.rootElement);
+    container.classList.add('container');
+    const ul = createElement('ul', container);
 
-      carry[gesture] = button;
+    this.buttonIndex = gestures.reduce((carry, gesture) => {
+      const li = createElement('li', ul);
+      carry[gesture] = this.createGestureButton(li, gesture);
       return carry;
     }, {});
+  }
+
+  createGestureButton(parent, gesture){
+    const gestureName = name(gesture);
+
+    const button = createElement('button', parent);
+    button.classList.add('gesture');
+    button.title = gestureName;
+    button.addEventListener('click', ev => this.handleClick(gesture));
+
+    const img = createElement('img', button);
+    img.alt = gestureName;
+    img.src = imageSrc(gesture);
+
+    return button;
   }
 
   enable(status){
@@ -50,6 +64,8 @@ export default class GestureDisplay {
     this.clearSelection();
 
     this.selectedGesture = gesture;
+
+    this.rootElement.classList.add('gesture-selected');
     this.buttonIndex[gesture].classList.add('selected');
 
     if(this.params.onSelection)
@@ -60,7 +76,9 @@ export default class GestureDisplay {
     if(!this.selectedGesture)
       return;
 
+    this.rootElement.classList.remove('gesture-selected');
     this.buttonIndex[this.selectedGesture].classList.remove('selected');
+
     this.selectedGesture = null;
   }
 }

@@ -27,7 +27,7 @@ describe('GestureDisplay setup', () => {
     const component = new GestureDisplay(parent, { enableSelection: true });
     const button = parent.querySelector('.gesture-display li:nth-child(1) button');
     button.click();
-    expect(button.className).toBe('selected');
+    expect(button.classList.contains('selected')).toBe(true);
   });
 
   test('should not call callback when selection is disabled and selection is made', () => {

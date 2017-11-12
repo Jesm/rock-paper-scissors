@@ -8,7 +8,11 @@ export default class MessageDisplay {
   setup(parent){
     this.root = createElement('section', parent);
     this.root.classList.add('message-display');
-    this.msgField = createElement('span', this.root);
+
+    const container = createElement('div', this.root);
+    container.classList.add('container');
+
+    this.msgField = createElement('span', container);
   }
 
   display(str){
