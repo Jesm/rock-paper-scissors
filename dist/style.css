@@ -1,0 +1,100 @@
+.container {
+  margin: auto;
+  max-width: 600px;
+  padding: 0 10px; }
+
+html {
+  background-color: #4285F4;
+  color: #FFF; }
+
+body {
+  margin: 0;
+  font-family: sans-serif; }
+
+.app .gesture-display.player {
+  background-color: #4285F4;
+  border-top: 3px solid #2063D2; }
+  .app .gesture-display.player .gesture {
+    background-color: #64A7F6; }
+
+.app .gesture-display.computer {
+  background-color: #EA4335;
+  border-bottom: 3px solid #C82113; }
+  .app .gesture-display.computer .gesture {
+    background-color: #FC6557;
+    opacity: 0.6; }
+    .app .gesture-display.computer .gesture.selected {
+      opacity: 1; }
+
+.app .container.buttons {
+  display: flex; }
+  .app .container.buttons .clickable-button {
+    flex: 1;
+    margin-right: 10px; }
+    .app .container.buttons .clickable-button:last-child {
+      margin-right: 0; }
+
+.gesture-display {
+  padding: 10px 0; }
+  .gesture-display ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none; }
+    .gesture-display ul > li {
+      flex: 1;
+      margin-right: 10px;
+      text-align: center; }
+      .gesture-display ul > li:last-child {
+        margin-right: 0; }
+  .gesture-display .gesture {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    text-align: center;
+    background-color: none;
+    cursor: pointer;
+    transition: opacity 0.3s; }
+    .gesture-display .gesture:hover {
+      border-color: #CCC; }
+    .gesture-display .gesture img {
+      max-width: 100%; }
+  .gesture-display.gesture-selected .gesture {
+    opacity: 0.6; }
+    .gesture-display.gesture-selected .gesture.selected {
+      opacity: 1;
+      border-color: #FFF; }
+
+.message-display {
+  padding: 10px;
+  font-family: monospace;
+  font-size: 1rem;
+  text-align: center;
+  background-color: #111;
+  color: #43D854;
+  text-shadow: 0 0 3px #43D854; }
+
+.clickable-button {
+  display: block;
+  margin-top: .8rem;
+  width: 100%;
+  border: 0;
+  line-height: 2.4rem;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  cursor: pointer;
+  background-color: #43D854;
+  color: #FFF;
+  transition: background-color 0.3s, opacity 0.3s; }
+  .clickable-button:disabled {
+    cursor: default;
+    background-color: #65FA76;
+    opacity: .6; }
+  .clickable-button.autoplay {
+    background-color: #FBBC05; }
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzdHlsZS5jc3MiLCJzb3VyY2VSb290IjoiIn0=*/
