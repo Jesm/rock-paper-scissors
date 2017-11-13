@@ -7,14 +7,14 @@ describe('MessageDisplay', () => {
     return { parent, component };
   };
 
-  describe('MessageDisplay setup', () => {
+  describe('setup', () => {
     test('should add a child node to parent', () => {
       const { parent } = aux();
       expect(parent.children).toHaveLength(1);
     });
   });
 
-  describe('MessageDisplay display', () => {
+  describe('display function', () => {
     test('should update innerText from the span element', () => {
       const { parent, component } = aux();
       component.display('foobar');

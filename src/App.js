@@ -1,6 +1,7 @@
-import AppComponent, { STATUS_CHANGE } from './components/App.js';
+import AppComponent, { STATUS_CHANGE, AUTOPLAY_STATUS_CHANGE } from './components/App.js';
 import { randomGesture } from './gestures';
 import { make } from './games';
+import AutoplayService from './AutoplayService.js';
 
 export const PLAYER = Symbol('player');
 export const COMPUTER = Symbol('computer');
@@ -20,6 +21,9 @@ export default class App {
     this.status = null;
     this.selectedGesture = null;
 
+    this.autoplayEnabled = false;
+    this.autoplayService = new AutoplayService(this, this.params.pauseDuration / 2);
+
     if(this.params.viewRoot)
       this.setupView(this.params.viewRoot);
 
@@ -31,7 +35,8 @@ export default class App {
 
     this.appComponent = new AppComponent(fragment, {
       onGestureSelection: gesture => this.setSelectedGesture(gesture),
-      onGestureConfirmation: () => this.confirmGesture()
+      onGestureConfirmation: () => this.confirmGesture(),
+      onAutoplayToggle: () => this.toggleAutoplay()
     });
 
     root.appendChild(fragment);
@@ -44,11 +49,18 @@ export default class App {
     setTimeout(() => {
       if(this.appComponent)
         this.appComponent.update(STATUS_CHANGE, Object.assign({ type: status }, params));
+
+      if(this.autoplayEnabled)
+        this.autoplayService.statusChange(status);
     }, 0);
   }
 
   getStatus(){
     return this.status;
+  }
+
+  autoplayIsEnabled(){
+    return this.autoplayEnabled;
   }
 
   start(){
@@ -85,5 +97,17 @@ export default class App {
 
     this.setStatus(GAME_GENERATED, { game });
     setTimeout(() => this.start(), this.params.pauseDuration);
+  }
+
+  toggleAutoplay(){
+    this.autoplayEnabled = !this.autoplayEnabled;
+
+    if(this.autoplayEnabled)
+      this.autoplayService.statusChange(this.status);
+    else
+      this.autoplayService.cancelAction();
+
+    if(this.appComponent)
+      this.appComponent.update(AUTOPLAY_STATUS_CHANGE, { status: this.autoplayEnabled });
   }
 }

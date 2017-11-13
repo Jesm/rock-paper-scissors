@@ -6,12 +6,14 @@ import MessageDisplay from './MessageDisplay.js';
 import ClickableButton from './ClickableButton.js';
 
 export const STATUS_CHANGE = Symbol('status_change');
+export const AUTOPLAY_STATUS_CHANGE = Symbol('autoplay_status_change');
 
 export default class App {
   constructor(parent, params = {}){
     this.params = Object.assign({
       onGestureSelection: null,
-      onGestureConfirmation: null
+      onGestureConfirmation: null,
+      onAutoplayToggle: null
     }, params);
 
     this.setup(parent);
@@ -31,15 +33,20 @@ export default class App {
     });
 
     const container = createElement('section', root);
-    container.classList.add('container');
+    container.className = 'container buttons';
 
-    this.confirmButton = new ClickableButton(container, { onClick: this.params.onGestureConfirmation });
+    this.confirmButton = new ClickableButton(container, { onClick: this.params.onGestureConfirmation, label: 'Confirm' });
+    this.autoplayButton = new ClickableButton(container, { onClick: this.params.onAutoplayToggle, classAppend: 'autoplay' });
+    this.setAutoplayButtonText(false);
   }
 
   update(type, data){
     switch(type){
       case STATUS_CHANGE:
         this.updateFromStatusChange(data);
+      break;
+      case AUTOPLAY_STATUS_CHANGE:
+        this.setAutoplayButtonText(data.status);
       break;
     }
   }
@@ -56,8 +63,10 @@ export default class App {
         this.setMessage('Choose your gesture from the options below!');
       break;
       case GESTURE_SELECTED:
+        const { gesture } = data;
         this.confirmButton.enable(true);
-        this.setMessage(`You chose ${name(data.gesture)}! Confirm to continue...`);
+        this.selectionComponent.setSelectedGesture(gesture);
+        this.setMessage(`You chose ${name(gesture)}! Confirm to continue...`);
       break;
       case GESTURE_CONFIRMED:
         this.confirmButton.enable(false);
@@ -81,6 +90,10 @@ export default class App {
         this.setMessage(msg);
       break;
     }
+  }
+
+  setAutoplayButtonText(status){
+    this.autoplayButton.setLabel(`${status ? 'Disable' : 'Enable'} autoplay`);
   }
 
   setMessage(str){

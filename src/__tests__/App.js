@@ -15,39 +15,74 @@ describe('setup', () => {
   });
 
   test('should change status when confirmation button is clicked', () => {
-    parent.querySelector('.clickable-button').click();
+    parent.querySelector('.clickable-button:nth-child(1)').click();
     expect(app.getStatus()).toBe(GESTURE_CONFIRMED);
+  });
+
+  test('should change autoplay status when autoplay button is clicked', () => {
+    const button = parent.querySelector('.clickable-button:nth-child(2)');
+
+    button.click();
+    expect(app.autoplayIsEnabled()).toBe(true);
+
+    button.click();
+    expect(app.autoplayIsEnabled()).toBe(false);
   });
 });
 
 describe('game status change over time', () => {
-  const delay = 50;
-  const app = new App({ pauseDuration: delay });
+  const aux = () => {
+    const delay = 50;
+    const app = new App({ pauseDuration: delay });
 
-  describe('setSelectedGesture function', () => {
-    test('should change status to GESTURE_SELECTED', () => {
-      app.setSelectedGesture(ROCK);
-      expect(app.getStatus()).toBe(GESTURE_SELECTED);
+    return { delay, app };
+  };
+
+  describe('correct flow player vs computer', () => {
+    const { delay, app } = aux();
+
+    describe('setSelectedGesture function', () => {
+      test('should change status to GESTURE_SELECTED', () => {
+        app.setSelectedGesture(ROCK);
+        expect(app.getStatus()).toBe(GESTURE_SELECTED);
+      });
+    });
+
+    describe('setSelectedGesture function', () => {
+      test('should change status to GESTURE_CONFIRMED', () => {
+        app.confirmGesture();
+        expect(app.getStatus()).toBe(GESTURE_CONFIRMED);
+      });
+    });
+
+    describe('status changes after pauses', () => {
+      test('should change status to GAME_GENERATED after the delay', done => {
+        expect(app.getStatus()).toBe(GESTURE_CONFIRMED);
+
+        setTimeout(() => expect(app.getStatus()).toBe(GAME_GENERATED), delay + 10);
+
+        setTimeout(() => {
+          expect(app.getStatus()).toBe(READY);
+          done();
+        }, delay * 2 + 10);
+      });
     });
   });
 
-  describe('setSelectedGesture function', () => {
-    test('should change status to GESTURE_CONFIRMED', () => {
-      app.confirmGesture();
-      expect(app.getStatus()).toBe(GESTURE_CONFIRMED);
-    });
-  });
+  describe('toggleAutoplay function', () => {
+    const { delay, app } = aux();
 
-  describe('status changes after pauses', () => {
-    test('should change status to GAME_GENERATED after the delay', done => {
-      expect(app.getStatus()).toBe(GESTURE_CONFIRMED);
+    test('status change over time', done => {
+      app.toggleAutoplay();
 
-      setTimeout(() => expect(app.getStatus()).toBe(GAME_GENERATED), delay + 10);
+      expect(app.getStatus()).toBe(READY);
+
+      setTimeout(() => expect(app.getStatus()).toBe(GESTURE_SELECTED), delay / 2 + 10);
 
       setTimeout(() => {
-        expect(app.getStatus()).toBe(READY);
+        expect(app.getStatus()).toBe(GESTURE_CONFIRMED);
         done();
-      }, delay * 2 + 10);
+      }, delay + 10);
     });
   });
 });
@@ -81,4 +116,3 @@ describe('functions must disallow invalid state changes', () => {
     });
   });
 });
-
